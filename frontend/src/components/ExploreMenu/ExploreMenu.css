@@ -45,7 +45,7 @@
 
 .explore-menu-list-item p {
   margin-top: 10px;
-  color: #747474;
+  color: #535353;
   font-size: max(1.4vw, 16px);
   cursor: pointer;
 }
@@ -53,6 +53,6 @@
 .explore-menu hr {
   margin: 10px 0px;
   height: 2px;
-  background-color: #e2e2e2;
+  background-color: #707070;
   border: none;
 }
