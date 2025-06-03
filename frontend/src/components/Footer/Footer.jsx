@@ -1,13 +1,19 @@
 import React from 'react'
 import './Footer.css'
 import { assets } from '../../assets/assets'
+import TastoLogo from "../../assets/Tasto-logo.png";
+
+
 const Footer = () => {
   return (
     <div className='footer' id='footer'>
       <div className="footer-content">
+       
         <div className="footer-content-left">
-            <img src={assets.logo} alt="" />
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, quia! Architecto, natus vitae itaque quas et tempora sint? Voluptatibus, ab.</p>
+            <img src={TastoLogo} alt="Tasto Logo" style={{ width: "80px", height: "auto" }} />
+
+
+            <p>Tasto is your trusted food delivery partner, bringing your favorite meals right to your doorstep. Fast, fresh, and reliable every time.</p>
             <div className="footer-social-icons">
                 <img src={assets.facebook_icon} alt="" />
                 <img src={assets.twitter_icon} alt="" />
