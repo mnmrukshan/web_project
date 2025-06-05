@@ -10,7 +10,12 @@ const Footer = () => {
       <div className="footer-content">
        
         <div className="footer-content-left">
-            <img src={TastoLogo} alt="Tasto Logo" style={{ width: "80px", height: "auto" }} />
+            <img
+  src={TastoLogo}
+  alt="Tasto Logo"
+  style={{ width: "80px", height: "auto", marginTop: "-40px" }}
+/>
+
 
 
             <p>Tasto is your trusted food delivery partner, bringing your favorite meals right to your doorstep. Fast, fresh, and reliable every time.</p>
