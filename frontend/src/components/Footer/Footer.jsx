@@ -1,24 +1,14 @@
 import React from 'react'
 import './Footer.css'
 import { assets } from '../../assets/assets'
-import TastoLogo from "../../assets/Tasto-logo.png";
-
 
 const Footer = () => {
   return (
     <div className='footer' id='footer'>
       <div className="footer-content">
-       
         <div className="footer-content-left">
-            <img
-  src={TastoLogo}
-  alt="Tasto Logo"
-  style={{ width: "80px", height: "auto", marginTop: "-40px" }}
-/>
-
-
-
-            <p>Tasto is your trusted food delivery partner, bringing your favorite meals right to your doorstep. Fast, fresh, and reliable every time.</p>
+            <img src={assets.logo} alt="" />
+            <p>This food ordering website helps you order meals easily and safely. You can look at the menu, place an order, and get your food delivered fast. Enjoy tasty food at home without any trouble quick and simple.</p>
             <div className="footer-social-icons">
                 <img src={assets.facebook_icon} alt="" />
                 <img src={assets.twitter_icon} alt="" />
@@ -33,19 +23,17 @@ const Footer = () => {
                 <li>Delivery</li>
                 <li>Privacy policy</li>
             </ul>
-
         </div>
         <div className="footer-content-right">
             <h2>GET IN TOUCH</h2>
             <ul>
-                <li>+94-760765672 </li>
-                <li>tasto@gmail.com</li>
+                <li>+94-779753864</li>
+                <li>gamigedara@gmail.com</li>
             </ul>
-            
         </div>
       </div>
       <hr />
-      <p className="footer-copyright">copyright © 2025 tasto.com - All Right Reserved.</p>
+      <p className="footer-copyright">Copyright 2024 © Gamigedara.com - All Right Reserved.</p>
     </div>
   )
 }
