@@ -7,7 +7,9 @@ import { toast } from 'react-toastify';
 const Add = () => {
 
 
+
     const [image, setImage] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         name: "",
         description: "",
@@ -23,25 +25,38 @@ const Add = () => {
             return null;
         }
 
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("description", data.description);
-        formData.append("price", Number(data.price));
-        formData.append("category", data.category);
-        formData.append("image", image);
-        const response = await axios.post(`${url}/api/food/add`, formData);
-        if (response.data.success) {
-            toast.success(response.data.message)
-            setData({
-                name: "",
-                description: "",
-                price: "",
-                category: data.category
-            })
-            setImage(false);
-        }
-        else {
-            toast.error(response.data.message)
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("description", data.description);
+            formData.append("price", Number(data.price));
+            formData.append("category", data.category);
+            formData.append("image", image);
+            const response = await axios.post(`${url}/api/food/add`, formData);
+            if (response.data.success) {
+                toast.success(response.data.message)
+                setData({
+                    name: "",
+                    description: "",
+                    price: "",
+                    category: data.category
+                })
+                setImage(false);
+            } else {
+                toast.error(response.data.message || 'Failed to add food item');
+            }
+        } catch (error) {
+            console.error("Add food error:", error);
+            if (error.response) {
+                toast.error(`Server error: ${error.response.data?.message || error.response.statusText}`);
+            } else if (error.request) {
+                toast.error('Cannot reach server. Make sure the backend is running on port 4000.');
+            } else {
+                toast.error('An unexpected error occurred.');
+            }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -88,7 +103,7 @@ const Add = () => {
                         <input type="Number" name='price' onChange={onChangeHandler} value={data.price} placeholder='25' />
                     </div>
                 </div>
-                <button type='submit' className='add-btn' >ADD</button>
+                <button type='submit' className='add-btn' disabled={loading}>{loading ? 'Adding...' : 'ADD'}</button>
             </form>
         </div>
     )

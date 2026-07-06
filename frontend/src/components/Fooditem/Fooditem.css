@@ -19,6 +19,7 @@
     right: 15px;
     cursor: pointer;
     border-radius: 50%;
+    transition: 0.2s;
 }
 .food-item-img-container .add:hover{
     border: 2px solid #FF4C24;
@@ -26,6 +27,21 @@
 .food-item-image{
    width: 100%;
    border-radius: 15px 15px 0px 0px;
+}
+.food-item-new-badge{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #ff6347, #ff4500);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(255,69,0,0.35);
+    text-transform: uppercase;
+    z-index: 1;
 }
 .food-item-counter{
     position: absolute;

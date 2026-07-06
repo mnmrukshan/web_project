@@ -36,7 +36,7 @@ const PlaceOrder = () => {
         let orderItems = [];
         food_list.map(((item) => {
             if (cartItems[item._id] > 0) {
-                let itemInfo = item;
+                let itemInfo = { ...item };
                 itemInfo["quantity"] = cartItems[item._id];
                 orderItems.push(itemInfo)
             }
@@ -47,24 +47,36 @@ const PlaceOrder = () => {
             amount: getTotalCartAmount() + deliveryCharge,
         }
         if (payment === "stripe") {
-            let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } });
-            if (response.data.success) {
-                const { session_url } = response.data;
-                window.location.replace(session_url);
-            }
-            else {
-                toast.error("Something Went Wrong")
+            try {
+                let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } });
+                if (response.data.success) {
+                    const { session_url } = response.data;
+                    window.location.replace(session_url);
+                } else {
+                    toast.error(response.data.message || "Stripe payment failed. Please try COD instead.")
+                }
+            } catch (error) {
+                console.error("Stripe order error:", error);
+                if (error.response?.data?.message) {
+                    toast.error(error.response.data.message);
+                } else {
+                    toast.error("Stripe is not configured. Please use Cash on Delivery.");
+                }
             }
         }
-        else{
-            let response = await axios.post(url + "/api/order/placecod", orderData, { headers: { token } });
-            if (response.data.success) {
-                navigate("/myorders")
-                toast.success(response.data.message)
-                setCartItems({});
-            }
-            else {
-                toast.error("Something Went Wrong")
+        else {
+            try {
+                let response = await axios.post(url + "/api/order/placecod", orderData, { headers: { token } });
+                if (response.data.success) {
+                    navigate("/myorders")
+                    toast.success(response.data.message)
+                    setCartItems({});
+                } else {
+                    toast.error(response.data.message || "Failed to place order. Please try again.")
+                }
+            } catch (error) {
+                console.error("COD order error:", error);
+                toast.error("Could not place order. Please check your connection and try again.");
             }
         }
 
@@ -72,10 +84,9 @@ const PlaceOrder = () => {
 
     useEffect(() => {
         if (!token) {
-            toast.error("to place an order sign in first")
+            toast.error("Please sign in to place an order")
             navigate('/cart')
-        }
-        else if (getTotalCartAmount() === 0) {
+        } else if (getTotalCartAmount() === 0) {
             navigate('/cart')
         }
     }, [token])

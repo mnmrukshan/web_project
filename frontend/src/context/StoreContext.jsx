@@ -6,7 +6,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
 
     const url = "http://localhost:4000"
-    const [food_list, setFoodList] = useState(static_food_list); // default to static assets
+    const [food_list, setFoodList] = useState(static_food_list); // static items shown immediately
     const [cartItems, setCartItems] = useState({});
     const [token, setToken] = useState("")
     const currency = "$";
@@ -48,17 +48,33 @@ const StoreContextProvider = (props) => {
         return totalAmount;
     }
 
+    // Category display order matches ExploreMenu
+    const CATEGORY_ORDER = ['Salad', 'Rolls', 'Deserts', 'Sandwich', 'Cake', 'Pure Veg', 'Pasta', 'Noodles'];
+
     const fetchFoodList = async () => {
         try {
             const response = await axios.get(url + "/api/food/list");
-            // Only replace static list if backend returned real data
-            if (response.data.success && response.data.data && response.data.data.length > 0) {
-                setFoodList(response.data.data);
+            if (response.data.success) {
+                const backendItems = response.data.data || [];
+                // Merge static dummies + real DB items, then sort by category order
+                // so admin-added items (e.g. "Cheese Cake") appear AMONG the same
+                // category items, not appended at the very end of the list.
+                const merged = [...static_food_list, ...backendItems];
+                merged.sort((a, b) => {
+                    const ai = CATEGORY_ORDER.indexOf(a.category);
+                    const bi = CATEGORY_ORDER.indexOf(b.category);
+                    // Unknown categories go to end
+                    const aIdx = ai === -1 ? 999 : ai;
+                    const bIdx = bi === -1 ? 999 : bi;
+                    return aIdx - bIdx;
+                });
+                setFoodList(merged);
+            } else {
+                setFoodList(static_food_list);
             }
-            // Otherwise keep the static fallback list already set as default state
         } catch (error) {
             console.error("Backend not reachable, using static food list:", error.message);
-            // static_food_list already set as initial state, no action needed
+            setFoodList(static_food_list);
         }
     }
 

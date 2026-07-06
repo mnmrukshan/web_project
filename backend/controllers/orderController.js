@@ -11,7 +11,12 @@ const frontend_URL = 'http://localhost:5173';
 const placeOrder = async (req, res) => {
 
     try {
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+        const stripeKey = process.env.STRIPE_SECRET_KEY;
+        if (!stripeKey || stripeKey === 'your_stripe_secret_key_here') {
+            return res.json({ success: false, message: "Stripe is not configured. Please use Cash on Delivery." });
+        }
+
+        const stripe = new Stripe(stripeKey);
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: req.body.items,
@@ -54,7 +59,7 @@ const placeOrder = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" })
+        res.json({ success: false, message: error.message || "Stripe payment error. Please use Cash on Delivery." })
     }
 }
 
