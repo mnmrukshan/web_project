@@ -18,9 +18,12 @@ const Cart = () => {
         <hr />
         {food_list.map((item, index) => {
           if (cartItems[item._id]>0) {
+            const imageSrc = typeof item.image === 'string' && !item.image.startsWith('data:') && !item.image.startsWith('blob:') && !item.image.startsWith('/')
+              ? url + "/images/" + item.image
+              : item.image;
             return (<div key={index}>
               <div className="cart-items-title cart-items-item">
-                <img src={url+"/images/"+item.image} alt="" />
+                <img src={imageSrc} alt="" />
                 <p>{item.name}</p>
                 <p>{currency}{item.price}</p>
                 <div>{cartItems[item._id]}</div>
